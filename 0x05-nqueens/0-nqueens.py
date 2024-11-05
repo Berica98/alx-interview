@@ -1,33 +1,44 @@
 #!/usr/bin/python3
-"""N Queens Problem - Solves the N Queens Puzzle using Backtracking"""
+"""N Queens"""
 import sys
 
-def print_board(board):
-    """Print each solution as a list of [row, col] positions of queens."""
-    solution = []
-    for row, col in enumerate(board):
-        solution.append([row, col])
-    print(solution)
 
-def is_position_safe(board, row, col):
-    """Check if placing a queen at board[row] == col is safe."""
-    for i in range(row):
-        if board[i] == col or \
-           board[i] - i == col - row or \
-           board[i] + i == col + row:
-            return False
-    return True
+def print_board(board, n):
+    """Print allocated positions to the queen"""
+    b = []
 
-def solve_nqueens(board, row, n):
-    """Recursive function to solve N Queens puzzle using backtracking."""
+    for i in range(n):
+        for j in range(n):
+            if j == board[i]:
+                b.append([i, j])
+    print(b)
+
+
+def is_position_safe(board, i, j, r):
+    """Checks if the position is safe for the queen"""
+    return board[i] in (j, j - i + r, i - r + j)
+
+
+def safe_positions(board, row, n):
+    """Find all safe positions where the queen can be allocated"""
     if row == n:
-        print_board(board)
+        print_board(board, n)
+
     else:
-        for col in range(n):
-            if is_position_safe(board, row, col):
-                board[row] = col
-                solve_nqueens(board, row + 1, n)
-                board[row] = -1  # Reset row after backtracking
+        for j in range(n):
+            allowed = True
+            for i in range(row):
+                if is_position_safe(board, i, j, row):
+                    allowed = False
+            if allowed:
+                board[row] = j
+                safe_positions(board, row + 1, n)
+
+
+def create_board(size):
+    """Generates the board"""
+    return [0 * size for i in range(size)]
+
 
 if len(sys.argv) != 2:
     print("Usage: nqueens N")
@@ -35,14 +46,14 @@ if len(sys.argv) != 2:
 
 try:
     n = int(sys.argv[1])
-except ValueError:
+except BaseException:
     print("N must be a number")
     exit(1)
 
-if n < 4:
+if (n < 4):
     print("N must be at least 4")
     exit(1)
 
-board = [-1] * n  # Initialize the board with -1 (no queens placed yet)
-solve_nqueens(board, 0, n)
-
+board = create_board(int(n))
+row = 0
+safe_positions(board, row, int(n))
