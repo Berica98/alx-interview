@@ -1,7 +1,7 @@
-0x08-making_change
+0x08. Making Change
 AlgorithmPython
 
-By: Elijah Ajayi Software Engineer at Holberton School (alx africa)
+By: Erica George Software Engineer at Holberton School (alx africa)
 Requirements
 General
 Allowed editors: vi, vim, emacs
